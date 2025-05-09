@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        $driver = DB::getDriverName();
+
+        if ($driver = 'pgsql') {
+            DB::statement("CREATE FUNCTION public.refresh_locales_by_config(supporteds json) RETURNS void"
+                . " LANGUAGE plpgsql"
+                . " AS \$\$BEGIN\n"
+                . "INSERT INTO locales(configname)\n"
+                . "  SELECT * FROM json_array_elements_text(supporteds) AS item\n"
+                . "    WHERE NOT EXISTS(\n"
+                . "      SELECT 1 FROM locales WHERE configname=item\n"
+                . ");\n"
+                . "\n"
+                . "UPDATE locales SET enabled = true\n"
+                . "  WHERE configname IN (\n"
+                . "    SELECT json_array_elements_text(supporteds));\n"
+                . "\n"
+                . "UPDATE locales SET enabled = false\n"
+                . "  WHERE configname NOT IN (\n"
+                . "    SELECT json_array_elements_text(supporteds));\n"
+                . "END\n"
+                . "$$;");
+
+            DB::statement("ALTER FUNCTION public.refresh_locales_by_config(supporteds json) OWNER TO zem;");
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        DB::statement("DROP FUNCTION IF EXISTS public.refresh_locales_by_config");
+    }
+};

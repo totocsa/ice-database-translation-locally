@@ -1,0 +1,53 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Totocsa\MigrationHelper\MigrationHelper;
+use Illuminate\Support\Facades\DB;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        $tableName = 'translationvariants';
+        Schema::create($tableName, function (Blueprint $table) {
+            $table->id()->primary();
+            $table->bigInteger('locales_id');
+            $table->bigInteger('translationoriginals_id');
+            $table->string('subtitle', 1000);
+            $table->timestamps();
+
+            $table->unique(['locales_id', 'translationoriginals_id']);
+        });
+
+        $driver = DB::getDriverName();
+
+        if ($driver = 'pgsql') {
+            MigrationHelper::defaultCreatedUpdated($tableName);
+
+            DB::statement("ALTER TABLE ONLY public.translationvariants"
+                . " ADD CONSTRAINT translationvariants_locales_id_foreign"
+                . " FOREIGN KEY (locales_id)"
+                . " REFERENCES public.locales(id)"
+                . " ON UPDATE CASCADE ON DELETE CASCADE;");
+
+            DB::statement("ALTER TABLE ONLY public.translationvariants"
+                . " ADD CONSTRAINT translationvariants_translationoriginals_id_foreign"
+                . " FOREIGN KEY (translationoriginals_id)"
+                . " REFERENCES public.translationoriginals(id)"
+                . " ON UPDATE CASCADE ON DELETE CASCADE;");
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('translationvariants');
+    }
+};

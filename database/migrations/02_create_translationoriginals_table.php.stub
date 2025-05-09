@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Totocsa\MigrationHelper\MigrationHelper;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        $tableName = 'translationoriginals';
+        Schema::create($tableName, function (Blueprint $table) {
+            $table->id()->primary();
+            $table->string('category', 100);
+            $table->string('subtitle', 1000);
+            $table->unique(['category', 'subtitle']);
+            $table->timestamps();
+        });
+
+        MigrationHelper::defaultCreatedUpdated($tableName);
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('translationoriginals');
+    }
+};

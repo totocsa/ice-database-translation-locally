@@ -1,0 +1,12 @@
+import { ref } from "vue"
+
+export function useEntityDecode() {
+    const decoder = ref(document.createElement("div"))
+
+    const entityDecode = (html) => {
+        decoder.value.innerHTML = html
+        return decoder.value.textContent
+    }
+
+    return { entityDecode }
+}
