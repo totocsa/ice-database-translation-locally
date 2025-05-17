@@ -29,7 +29,7 @@ return new class extends Migration
 
             DB::statement("ALTER FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals() OWNER TO zem;");
 
-            DB::statement("CREATE TRIGGER locales_after_insert_into_translationvariants AFTER INSERT ON public.locales FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
+            DB::statement("CREATE TRIGGER locales_after_insert_into_translationvariants AFTER INSERT OR UPDATE ON public.locales FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
             DB::statement("CREATE TRIGGER translationoriginals_after_insert_into_translationvariants AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
         }
     }

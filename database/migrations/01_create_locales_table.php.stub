@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('script', 100);
             $table->string('native', 100);
             $table->string('regional', 100);
-            $table->string('flag', 100);
+            $table->string('flag', 20);
             $table->timestamps();
         });
 
