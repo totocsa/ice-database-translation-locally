@@ -20,10 +20,6 @@ class SetLocale
         $locale = [
             'current' =>   LaravelLocalization::getCurrentLocale(), // Aktuális nyelv
             'supported' =>  LaravelLocalization::getSupportedLocales(), // Elérhető nyelvek
-            'flags' => [
-                'hu' => 'hu',
-                'en' => 'gb',
-            ],
         ];
 
         // Az aktuális nyelv hozzáadása a globális view/share változókhoz

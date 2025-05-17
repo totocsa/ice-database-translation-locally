@@ -2,29 +2,37 @@
 
 namespace Totocsa\DatabaseTranslationLocally\Validation;
 
-use Illuminate\Validation\Validator as LaravelValidator;
+use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule as RuleContract;
-use Illuminate\Support\MessageBag;
+use Illuminate\Contracts\Validation\ValidatorAwareRule;
+use Illuminate\Validation\InvokableValidationRule;
+use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationRuleParser;
+use Illuminate\Validation\Validator as LaravelValidator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Totocsa\DatabaseTranslationLocally\Validation\MessageBag;
 
 class Validator extends LaravelValidator
 {
     use FormatsMessages;
 
+    protected $messageType;
     protected $forTranslation = [];
 
-    public function messages($format = null)
+    public function messages($messageType = null)
     {
+        $this->messageType = $messageType;
+
         if (! $this->messages) {
-            $this->passes($format);
+            $this->passes($messageType);
         }
 
-        return $format === 'translatable' ? $this->forTranslation : $this->messages;
+        return $messageType === 'translatable' ? $this->forTranslation : $this->messages;
     }
 
-    public function passes($format = null)
+    public function passes($messageType = null)
     {
+        $this->messageType = $messageType;
         $this->messages = new MessageBag;
 
         [$this->distinctValues, $this->failedRules] = [[], []];
@@ -44,7 +52,7 @@ class Validator extends LaravelValidator
             }
 
             foreach ($rules as $rule) {
-                $this->validateAttribute($attribute, $rule, $format);
+                $this->validateAttribute($attribute, $rule);
 
                 if ($this->shouldBeExcluded($attribute)) {
                     break;
@@ -72,7 +80,7 @@ class Validator extends LaravelValidator
         return $this->messages->isEmpty();
     }
 
-    protected function validateAttribute($attribute, $rule, $format = null)
+    protected function validateAttribute($attribute, $rule)
     {
         $this->currentRule = $rule;
 
@@ -102,7 +110,7 @@ class Validator extends LaravelValidator
             $value instanceof UploadedFile && ! $value->isValid() &&
             $this->hasRule($attribute, array_merge($this->fileRules, $this->implicitRules))
         ) {
-            return $this->addFailure($attribute, 'uploaded', [], $format);
+            return $this->addFailure($attribute, 'uploaded', []);
         }
 
         // If we have made it this far we will make sure the attribute is validatable and if it is
@@ -111,9 +119,15 @@ class Validator extends LaravelValidator
         $validatable = $this->isValidatable($rule, $attribute, $value);
 
         if ($rule instanceof RuleContract) {
-            return $validatable
-                ? $this->validateUsingCustomRule($attribute, $value, $rule)
-                : null;
+            if ($validatable) {
+                if ($this->messageType === 'translatable') {
+                    return $this->validateUsingCustomRule($attribute, $value, $rule);
+                } else {
+                    return parent::validateUsingCustomRule($attribute, $value, $rule);
+                }
+            } else {
+                return null;
+            }
         }
 
         $method = "validate{$rule}";
@@ -121,7 +135,7 @@ class Validator extends LaravelValidator
         $this->numericRules = $this->defaultNumericRules;
 
         if ($validatable && ! $this->$method($attribute, $value, $parameters, $this)) {
-            $this->addFailure($attribute, $rule, $parameters, $format);
+            $this->addFailure($attribute, $rule, $parameters);
         }
     }
 
@@ -142,7 +156,7 @@ class Validator extends LaravelValidator
             $this->hasNotFailedPreviousRuleIfPresenceRule($rule, $attribute);
     }
 
-    public function addFailure($attribute, $rule, $parameters = [], $format = null)
+    public function addFailure($attribute, $rule, $parameters = [])
     {
         if (! $this->messages) {
             $this->passes();
@@ -160,21 +174,67 @@ class Validator extends LaravelValidator
             $parameters = $this->replaceDotPlaceholderInParameters($parameters);
         }
 
-        $value = $this->getMessage($attributeWithPlaceholders, $rule, $format);
+        $message = $this->getMessage($attributeWithPlaceholders, $rule);
 
-        if (is_null($format)) {
-            $replaced = $this->makeReplacements($value, $attribute, $rule, $parameters);
+        if (is_null($this->messageType)) {
+            $replaced = $this->makeReplacements($message, $attribute, $rule, $parameters);
             $this->messages->add($attribute, $replaced);
-        } elseif ($format === 'translatable') {
-            $replaced = $this->makeReplacements($value['message'], $attribute, $rule, $parameters);
+        } elseif ($this->messageType === 'translatable') {
+            $replaced = $this->makeReplacements($message['message'], $attribute, $rule, $parameters);
 
-            $this->messages->add($attribute, $replaced);
-
-            $value['message'] = $replaced;
-            $value['params'] = $parameters;
-            $this->forTranslation[$attribute][] = $value;
+            $this->messages->add($attribute, $replaced, $this->messageType, $this->forTranslation, $message, $parameters);
         }
 
         $this->failedRules[$attribute][$rule] = $parameters;
+    }
+
+    protected function validateUsingCustomRule($attribute, $value, $rule)
+    {
+        $originalAttribute = $this->replacePlaceholderInString($attribute);
+
+        $attribute = match (true) {
+            $rule instanceof Rules\Email => $attribute,
+            $rule instanceof Rules\File => $attribute,
+            $rule instanceof Rules\Password => $attribute,
+            default => $originalAttribute,
+        };
+
+        $value = is_array($value) ? $this->replacePlaceholders($value) : $value;
+
+        if ($rule instanceof ValidatorAwareRule) {
+            if ($attribute !== $originalAttribute) {
+                $this->addCustomAttributes([
+                    $attribute => $this->customAttributes[$originalAttribute] ?? $originalAttribute,
+                ]);
+            }
+
+            $rule->setValidator($this);
+        }
+
+        if ($rule instanceof DataAwareRule) {
+            $rule->setData($this->data);
+        }
+
+        if (! $rule->passes($attribute, $value, $this->data)) {
+            $ruleClass = $rule instanceof InvokableValidationRule ?
+                get_class($rule->invokable()) :
+                get_class($rule);
+
+            $this->failedRules[$originalAttribute][$ruleClass] = [];
+
+            $messages = $this->getFromLocalArray($originalAttribute, $ruleClass) ?? $rule->message();
+
+            $messages = $messages ? (array) $messages : [$ruleClass];
+
+            foreach ($messages as $key => $message) {
+                $key = is_string($key) ? $key : $originalAttribute;
+                $replaced = $this->makeReplacements($rule->message, $key, $ruleClass, $rule->parameters);
+                $replaced = strtr($replaced, $rule->parameters);
+
+                $messageArray = $this->getMessage($attribute, $rule->message(), $replaced);
+
+                $this->messages->add($attribute, $replaced, $this->messageType, $this->forTranslation, $messageArray, $rule->parameters);
+            }
+        }
     }
 }

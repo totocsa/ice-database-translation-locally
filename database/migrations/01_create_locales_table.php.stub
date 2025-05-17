@@ -17,6 +17,11 @@ return new class extends Migration
             $table->id()->primary();
             $table->string('configname', 100)->unique();
             $table->boolean('enabled')->default(true);
+            $table->string('name', 100)->unique();
+            $table->string('script', 100);
+            $table->string('native', 100);
+            $table->string('regional', 100);
+            $table->string('flag', 100);
             $table->timestamps();
         });
 

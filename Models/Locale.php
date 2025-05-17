@@ -5,6 +5,8 @@ namespace Totocsa\DatabaseTranslationLocally\Models;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Totocsa\DatabaseTranslationLocally\Rules\MustEnabledTrue;
 
 class Locale extends Model
 {
@@ -13,7 +15,7 @@ class Locale extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['configname', 'enabled'];
+    protected $fillable = ['configname', 'enabled', 'name', 'script', 'native', 'regional', 'flag'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -63,11 +65,22 @@ class Locale extends Model
         return $label;
     }
 
-    public static function rules($id = null): array
+    public static function rules($attributes = []): array
     {
+        $id = key_exists('id', $attributes) ? $attributes['id'] : null;
+
         return [
             'configname' => ['required', 'string', 'max:100', Rule::unique('locales')->ignore($id)],
-            'enabled' => ['required', 'boolean'],
+            'enabled' => [
+                'required',
+                'boolean',
+                new MustEnabledTrue(),
+            ],
+            'name' => ['required', 'string', 'max:100'],
+            'script' => ['required', 'string', 'max:100'],
+            'native' => ['required', 'string', 'max:100'],
+            'regional' => ['string', 'max:100'],
+            'flag' => ['string', 'max:20'],
         ];
     }
 

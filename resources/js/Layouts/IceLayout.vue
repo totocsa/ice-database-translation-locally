@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount } from "vue"
+import { onBeforeMount } from "vue"
 import { Head, Link, router, usePage } from '@inertiajs/vue3'
 import { LanguageIcon, UserIcon } from '@heroicons/vue/20/solid'
 import { useIndex } from '@/Components/totocsa/Icseusd/js/useIndex.js'
@@ -27,29 +27,11 @@ onBeforeMount(() => {
     }
 })
 
-const showingNavigationDropdown = ref(false)
-
-const switchToTeam = (team) => {
-    router.put(route('current-team.update'), {
-        team_id: team.id,
-    }, {
-        preserveState: false,
-    })
-}
-
 const logout = () => {
     router.post(route('logout'))
 }
 
 const isAuthUser = !(props.authUser === null || props.authUser === undefined)
-const menuItems = [
-    { route: '/', routeCurrent: '/', subtitle: 'Welcome', visible: true },
-    { route: 'dashboard', routeCurrent: 'dashboard', subtitle: 'Dashboard', visible: isAuthUser },
-    { route: 'translations.index', routeCurrent: 'translations.*', subtitle: 'Translations', visible: isAuthUser },
-    { route: 'users.index', routeCurrent: 'users.*', subtitle: 'Users', visible: isAuthUser },
-    { route: 'authorization.index', routeCurrent: 'authorization.*', subtitle: 'Authorizations', visible: isAuthUser },
-    { route: 'icseusd.generics.index', routeParams: { configName: 'users' }, routeCurrent: 'icseusd.generics.*', subtitle: 'Generic', visible: isAuthUser },
-]
 </script>
 
 <template>

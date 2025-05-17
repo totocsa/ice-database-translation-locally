@@ -19,7 +19,7 @@ return new class extends Migration
                 . "INSERT INTO translationvariants(locales_id, translationoriginals_id, subtitle)\n"
                 . "  SELECT t1.id, t2.id, ''\n"
                 . "    FROM locales t1, translationoriginals t2\n"
-                . "    WHERE NOT EXISTS(\n"
+                . "    WHERE t1.enabled AND NOT EXISTS(\n"
                 . "      SELECT 1 FROM translationvariants\n"
                 . "      WHERE locales_id=t1.id AND translationoriginals_id=t2.id);\n"
                 . "\n"

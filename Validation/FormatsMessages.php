@@ -9,7 +9,7 @@ trait FormatsMessages
 {
     use \Illuminate\Validation\Concerns\FormatsMessages;
 
-    protected function getMessage($attribute, $rule, $format = null)
+    protected function getMessage($attribute, $rule, $replaced = '')
     {
         $attributeWithPlaceholders = $attribute;
 
@@ -45,10 +45,10 @@ trait FormatsMessages
         // specific error message for the type of attribute being validated such
         // as a number, file or string which all have different message types.
         elseif (in_array($rule, $this->sizeRules)) {
-            $value = $this->getSizeMessage($attributeWithPlaceholders, $rule, $format);
-            if (is_null($format)) {
+            $value = $this->getSizeMessage($attributeWithPlaceholders, $rule);
+            if (is_null($this->messageType)) {
                 return $value;
-            } else if ($format === 'translatable') {
+            } else if ($this->messageType === 'translatable') {
                 return [
                     'key' => DatabaseLoader::_appPrefix . ".{$value['key']}",
                     'original' =>  $this->translator->get($value['key'], [], env('APP_LOCALE', app()->getLocale())),
@@ -63,15 +63,21 @@ trait FormatsMessages
         $key = "validation.{$lowerRule}";
 
         if ($key !== ($value = $this->translator->get($key))) {
-            if (is_null($format)) {
+            if (is_null($this->messageType)) {
                 return $value;
-            } else if ($format === 'translatable') {
+            } else if ($this->messageType === 'translatable') {
                 return [
                     'key' => DatabaseLoader::_appPrefix . ".$key",
                     'original' =>  $this->translator->get($key, [], env('APP_LOCALE', app()->getLocale())),
                     'message' => $value,
                 ];
             }
+        } elseif ($this->messageType === 'translatable') {
+            return [
+                'key' => DatabaseLoader::_appPrefix . ".$key",
+                'original' =>  $this->translator->get($key, [], env('APP_LOCALE', app()->getLocale())),
+                'message' => $replaced,
+            ];
         }
 
         return $this->getFromLocalArray(
