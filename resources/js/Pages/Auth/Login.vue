@@ -1,8 +1,8 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3'
 import IceLayout from '@/Layouts/IceLayout.vue'
 import ControllerMenu from "@IceIcseusd/Components/totocsa/Icseusd/ControllerMenu.vue"
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue'
 import Checkbox from '@/Components/Checkbox.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
