@@ -1,7 +1,7 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
 import IceLayout from '@/Layouts/IceLayout.vue'
-import ControllerMenu from '@/Components/totocsa/Icseusd/ControllerMenu.vue'
+import ControllerMenu from '@IceIcseusd/Components/totocsa/Icseusd/ControllerMenu.vue'
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue'
 import LogoutOtherBrowserSessionsForm from '@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue'
 import SectionBorder from '@/Components/SectionBorder.vue'

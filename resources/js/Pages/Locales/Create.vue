@@ -2,9 +2,9 @@
 import { reactive } from "vue"
 import { Link } from '@inertiajs/vue3'
 import IceLayout from '@/Layouts/IceLayout.vue';
-import IcseusdCreate from '@/Components/totocsa/Icseusd/Create.vue';
-import ControllerMenu from "@/Components/totocsa/Icseusd/ControllerMenu.vue";
-import ActionMenu from '@/Components/totocsa/Icseusd/ActionMenu/ActionMenu.vue';
+import IcseusdCreate from '@IceIcseusd/Components/totocsa/Icseusd/Create.vue';
+import ControllerMenu from "@IceIcseusd/Components/totocsa/Icseusd/ControllerMenu.vue";
+import ActionMenu from '@IceIcseusd/Components/totocsa/Icseusd/ActionMenu/ActionMenu.vue';
 import LocalTranslation from '@/Components/totocsa/LocalTranslation/LocalTranslation.vue';
 
 const props = defineProps({

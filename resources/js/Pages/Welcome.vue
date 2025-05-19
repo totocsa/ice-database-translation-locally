@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import IceLayout from '@/Layouts/IceLayout.vue';
-import ControllerMenu from '@/Components/totocsa/Icseusd/ControllerMenu.vue';
+import ControllerMenu from "@IceIcseusd/Components/totocsa/Icseusd/ControllerMenu.vue"
 import LocalTranslation from '@/Components/totocsa/LocalTranslation/LocalTranslation.vue';
 
 const props = defineProps({
