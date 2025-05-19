@@ -2,10 +2,8 @@
 
 namespace Totocsa\DatabaseTranslationLocally\Rules;
 
-//use Illuminate\Contracts\Validation\Rule;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Totocsa\DatabaseTranslationLocally\Rules\BaseCustomRule;
-use Totocsa\DatabaseTranslationLocally\Models\Translationoriginal;
 
 class MustEnabledTrue extends BaseCustomRule
 {

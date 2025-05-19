@@ -27,7 +27,7 @@ const controllerMenuLinkActive = controllerMenuLink.concat(["bg-gray-200"])
     <IceLayout title="Users" :authUser="$page.props.auth.user">
         <template #header>
             <ControllerMenu v-if="$page.props.auth.user" :userRoles="props.userRoles" groupName="default" active="root">
-                <Link id="root" :href="route('/')" :class="controllerMenuLinkActive">
+                <Link id="root" :href="route('appRoot')" :class="controllerMenuLinkActive">
                 <LocalTranslation category="ControllerMenu-item" subtitle="Welcome" />
                 </Link>
 
@@ -41,7 +41,7 @@ const controllerMenuLinkActive = controllerMenuLink.concat(["bg-gray-200"])
             </ControllerMenu>
 
             <ControllerMenu v-else :userRoles="props.userRoles" groupName="default" active="root">
-                <Link id="root" :href="route('/')" :class="controllerMenuLinkActive">
+                <Link id="root" :href="route('appRoot')" :class="controllerMenuLinkActive">
                 <LocalTranslation category="ControllerMenu-item" subtitle="Welcome" />
                 </Link>
 

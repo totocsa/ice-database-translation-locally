@@ -26,7 +26,7 @@ const controllerMenuLinkActive = controllerMenuLink.concat(["bg-gray-200"])
         <template #header>
             <ControllerMenu v-if="$page.props.auth.user" :userRoles="$page.props.userRoles" groupName="default"
                 active="profile-show">
-                <Link :href="route('/')" :class="controllerMenuLink">
+                <Link :href="route('appRoot')" :class="controllerMenuLink">
                 <LocalTranslation category="ControllerMenu-item" subtitle="Welcome" />
                 </Link>
 

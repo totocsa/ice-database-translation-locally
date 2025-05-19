@@ -44,7 +44,7 @@ const controllerMenuLinkActive = controllerMenuLink.concat(["bg-gray-200"])
     <IceLayout :title="titleArray" :authUser="$page.props.auth.user">
         <template #header>
             <ControllerMenu :userRoles="props.userRoles" groupName="default" active="login">
-                <Link :href="route('/')" :class="controllerMenuLink">
+                <Link :href="route('appRoot')" :class="controllerMenuLink">
                 <LocalTranslation category="ControllerMenu-item" subtitle="Welcome" />
                 </Link>
 

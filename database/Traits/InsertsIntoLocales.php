@@ -4,7 +4,7 @@ namespace Totocsa\DatabaseTranslationLocally\database\Traits;
 
 trait InsertsIntoLocales
 {
-    protected $items = [
+    protected $localeItems = [
         'ace'         => ['name' => 'Achinese',               'script' => 'Latn', 'native' => 'Aceh', 'regional' => ''],
         'af'          => ['name' => 'Afrikaans',              'script' => 'Latn', 'native' => 'Afrikaans', 'regional' => 'af_ZA'],
         'agq'         => ['name' => 'Aghem',                  'script' => 'Latn', 'native' => 'Aghem', 'regional' => ''],
@@ -296,4 +296,13 @@ trait InsertsIntoLocales
         'jv-Java'     => ['name' => 'Javanese (Javanese)',    'script' => 'Java', 'native' => 'ꦧꦱꦗꦮ', 'regional' => ''],
         'ko'          => ['name' => 'Korean',                 'script' => 'Hang', 'native' => '한국어', 'regional' => 'ko_KR'],
     ];
+
+    protected $flags = [
+        'en' => 'gb',
+    ];
+
+    protected function getFlag($configname)
+    {
+        return isset($this->flags[$configname]) ? $this->flags[$configname] : '';
+    }
 }

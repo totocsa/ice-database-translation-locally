@@ -18,20 +18,21 @@ class InsertsIntoLocales extends Seeder
 
         DB::beginTransaction();
 
+        $appLocale = env('APP_LOCALE', 'en');
         $allValid = true;
-        foreach ($this->items as $k => $v) {
+        foreach ($this->localeItems as $k => $v) {
             $attributes = [
                 'configname' => $k,
-                'enabled' => $k === 'en',
+                'enabled' => $k === $appLocale,
                 'name' => $v['name'],
                 'script' => $v['script'],
                 'native' => $v['native'],
                 'regional' => $v['regional'],
-                'flag' => $v['flag'],
+                'flag' => $this->getFlag($k),
             ];
 
             $validator = Validator::make($attributes, $rules);
-            if ($validator->passes()) {
+            if ($validator->passes('translatable')) {
                 $locale = new Locale();
                 $locale->setRawAttributes($attributes);
                 $locale->save();

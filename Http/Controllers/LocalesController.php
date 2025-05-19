@@ -17,7 +17,7 @@ class LocalesController extends IcseusdController
 
     public $orders = [
         'index' => [
-            'filters' => ['locales-configname', 'locales-flag', 'locales-enabled', 'locales-name', 'locales-script', 'locales-native', 'locales-regional', 'locales-flag'],
+            'filters' => ['locales-configname', 'locales-enabled', 'locales-name', 'locales-script', 'locales-native', 'locales-regional', 'locales-flag'],
             'sorts' => [
                 'locales-configname' => ['locales-configname', 'locales-enabled', 'locales-name', 'locales-script', 'locales-native', 'locales-regional'],
                 'locales-enabled' => ['locales-enabled', 'locales-configname',  'locales-name', 'locales-script', 'locales-native', 'locales-regional'],
@@ -94,102 +94,118 @@ class LocalesController extends IcseusdController
     public function fields()
     {
         return [
-            'locales-configname' => [
-                'form' => [
-                    'tag' => 'input',
+            'filter' => [
+                'locales-configname' => [
+                    'tagName' => 'input',
                     'attributes' => [
                         'type' => 'text',
                     ],
                 ],
-                'filter' => [
-                    'tag' => 'input',
+                'locales-enabled' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-name' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-script' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-native' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-regional' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-flag' => [
+                    'tagName' => 'input',
                     'attributes' => [
                         'type' => 'text',
                     ],
                 ],
             ],
-            'locales-enabled' => [
-                'form' => [
-                    'tag' => 'input',
+            'item' => [
+                'locales-enabled' => [
+                    'tagName' => 'item_boolean',
+                    'options' => [
+                        'true' => 'yes',
+                        'false' => 'no',
+                    ],
+                ],
+                'locales-flag' => [
+                    'tagName' => 'item_flag',
+                    'ifEmpty' => 'locales-configname',
+                ],
+            ],
+            'form' => [
+                'locales-configname' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-enabled' => [
+                    'tagName' => 'input',
                     'attributes' => [
                         'type' => 'checkbox',
                     ],
                 ],
-                'filter' => [
-                    'tag' => 'input',
+                'locales-name' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-script' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-native' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-regional' => [
+                    'tagName' => 'input',
+                    'attributes' => [
+                        'type' => 'text',
+                    ],
+                ],
+                'locales-flag' => [
+                    'tagName' => 'flag',
                     'attributes' => [
                         'type' => 'text',
                     ],
                 ],
             ],
-            'locales-name' => [
-                'form' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
+            'show' => [
+                'locales-enabled' => [
+                    'tagName' => 'item_boolean',
+                    'options' => [
+                        'true' => 'yes',
+                        'false' => 'no',
                     ],
                 ],
-                'filter' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
-                ],
-            ],
-            'locales-script' => [
-                'form' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
-                ],
-                'filter' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
-                ],
-            ],
-            'locales-native' => [
-                'form' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
-                ],
-                'filter' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
-                ],
-            ],
-            'locales-regional' => [
-                'form' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
-                ],
-                'filter' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
-                ],
-            ],
-            'locales-flag' => [
-                'form' => [
-                    'tag' => 'flag',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
-                ],
-                'filter' => [
-                    'tag' => 'input',
-                    'attributes' => [
-                        'type' => 'text',
-                    ],
+                'locales-flag' => [
+                    'tagName' => 'item_flag',
+                    'ifEmpty' => 'locales-configname',
                 ],
             ],
         ];
