@@ -1,7 +1,6 @@
 <script setup>
 import { reactive } from "vue"
 import { Link } from '@inertiajs/vue3'
-import "/node_modules/flag-icons/css/flag-icons.min.css"
 import IceLayout from '@/Layouts/IceLayout.vue';
 import IcseusdEdit from '@/Components/totocsa/Icseusd/Edit.vue';
 import ControllerMenu from '@/Components/totocsa/Icseusd/ControllerMenu.vue';

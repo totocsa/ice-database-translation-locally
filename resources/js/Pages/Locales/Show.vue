@@ -14,6 +14,7 @@ const props = defineProps({
     modelClassName: String,
     item: Object,
     orders: Object,
+    fields: Object,
 })
 
 const titleArray = ['Users', 'Users', 'ActionMenu', 'Show', props.item.id]
@@ -81,7 +82,7 @@ const actionMenuConfig = {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="p-4 bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <IcseusdShow :modelClassName="props.modelClassName" :item="props.item" :orders="props.orders" />
+                    <IcseusdShow :config="props" />
                 </div>
             </div>
         </div>
