@@ -9,7 +9,7 @@ import Banner from '@/Components/Banner.vue'
 import Dropdown from '@/Components/Dropdown.vue'
 import DropdownLink from '@/Components/DropdownLink.vue'
 import ModalLiFo from "@/Components/totocsa/ModalLiFo/ModalLiFo.vue"
-import LanguageSwitcher from '@/Components/totocsa/LanguageSwitcher.vue'
+import LanguageSwitcher from '@IceDatabaseTranslationLocally/Components/totocsa/LanguageSwitcher.vue'
 
 const props = defineProps({
     title: [String, Array],

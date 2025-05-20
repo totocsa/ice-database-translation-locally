@@ -16,7 +16,8 @@ class DatabaseTranslationLocallyServiceProvider extends ServiceProvider
 
     public function boot($r = null)
     {
-        $groups = 'ice-database-translation-locally';
+        $groupsBase = 'ice-database-translation-locally';
+        $groups = "$groupsBase-migrations";
         $global = $GLOBALS;
         $isPublish = isset($global['argv']) && isset($global['argv'][0]) && $global['argv'][0] === 'artisan'
             && isset($global['argv'][1]) && $global['argv'][1] === 'vendor:publish'
@@ -33,8 +34,7 @@ class DatabaseTranslationLocallyServiceProvider extends ServiceProvider
             $paths[$fileInfo->getPathname()] = $publishAs;
         }
 
-        $paths[__DIR__ . '/resources/js/'] = resource_path('js');
-
         $this->publishes($paths, $groups);
+        $this->publishes([__DIR__ . '/resources' =>  resource_path()], "$groupsBase-resources");
     }
 }
