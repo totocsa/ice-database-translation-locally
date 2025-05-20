@@ -2,7 +2,7 @@ import { markRaw, reactive } from "vue"
 import { router, usePage } from "@inertiajs/vue3"
 import { defineStore } from "pinia"
 import LocalTranslationForm from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/LocalTranslationForm.vue"
-import { useModalLiFoStore } from "@/Components/totocsa/ModalLiFo/ModalLiFoStore.js"
+import { useModalLiFoStore } from "@IceModalLiFo/Components/totocsa/ModalLiFo/ModalLiFoStore.js"
 
 const page = usePage()
 
