@@ -1,7 +1,7 @@
 <script setup>
 import { useAttrs } from "vue"
-import { useTranslationStore } from "@/Components/totocsa/LocalTranslation/translationStore"
-import { t } from "@/Components/totocsa/LocalTranslation/translation"
+import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translationStore"
+import { t } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translation"
 import { LanguageIcon } from '@heroicons/vue/20/solid'
 
 const props = defineProps({

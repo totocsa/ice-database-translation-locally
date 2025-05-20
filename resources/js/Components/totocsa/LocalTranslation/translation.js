@@ -1,4 +1,4 @@
-import { useTranslationStore } from "@/Components/totocsa/LocalTranslation/translationStore"
+import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translationStore"
 
 export function t(category, originalSubtitle, locale, params) {
     return useTranslationStore().findTranslation(

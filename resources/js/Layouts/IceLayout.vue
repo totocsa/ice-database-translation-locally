@@ -3,7 +3,7 @@ import { onBeforeMount } from "vue"
 import { Head, Link, router, usePage } from '@inertiajs/vue3'
 import { LanguageIcon, UserIcon } from '@heroicons/vue/20/solid'
 import { useIndex } from '@IceIcseusd/Components/totocsa/Icseusd/js/useIndex.js'
-import { useTranslationStore } from "@/Components/totocsa/LocalTranslation/translationStore"
+import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translationStore"
 import ApplicationMark from '@/Components/ApplicationMark.vue'
 import Banner from '@/Components/Banner.vue'
 import Dropdown from '@/Components/Dropdown.vue'

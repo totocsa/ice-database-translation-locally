@@ -2,7 +2,7 @@
 import { XMarkIcon } from '@heroicons/vue/20/solid'
 import { shallowRef } from "vue"
 import { usePage } from "@inertiajs/vue3"
-import { useTranslationStore } from "@/Components/totocsa/LocalTranslation/translationStore"
+import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translationStore"
 import { useModalLiFoStore } from '@/Components/totocsa/ModalLiFo/ModalLiFoStore.js'
 import CountItemsAndTranslationIcon from "@/Components/totocsa/ModalLiFo/CountItemsAndTranslationIcon.vue"
 import Modal from "@/Components/totocsa/ModalLiFo/Modal.vue"

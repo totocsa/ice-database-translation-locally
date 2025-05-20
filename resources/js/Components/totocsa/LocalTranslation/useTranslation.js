@@ -1,4 +1,4 @@
-import { useTranslationStore } from "@/Components/totocsa/LocalTranslation/translationStore"
+import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translationStore"
 
 export function useT() {
     const store = useTranslationStore()
