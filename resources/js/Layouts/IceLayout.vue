@@ -2,14 +2,14 @@
 import { onBeforeMount } from "vue"
 import { Head, Link, router, usePage } from '@inertiajs/vue3'
 import { LanguageIcon, UserIcon } from '@heroicons/vue/20/solid'
-import { useIndex } from '@IceIcseusd/Components/totocsa/Icseusd/js/useIndex.js'
-import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translationStore"
+import { useIndex } from '@IceIcseusd/Components/Icseusd/js/useIndex.js'
+import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/LocalTranslation/translationStore"
 import ApplicationMark from '@/Components/ApplicationMark.vue'
 import Banner from '@/Components/Banner.vue'
-import Dropdown from '@IceIcseusd/Components/totocsa/Dropdown.vue'
+import Dropdown from '@IceIcseusd/Components/Dropdown.vue'
 import DropdownLink from '@/Components/DropdownLink.vue'
-import ModalLiFo from "@IceModalLiFo/Components/totocsa/ModalLiFo/ModalLiFo.vue"
-import LanguageSwitcher from '@IceDatabaseTranslationLocally/Components/totocsa/LanguageSwitcher.vue'
+import ModalLiFo from "@IceModalLiFo/Components/ModalLiFo/ModalLiFo.vue"
+import LanguageSwitcher from '@IceDatabaseTranslationLocally/Components/LanguageSwitcher.vue'
 
 const props = defineProps({
     title: [String, Array],

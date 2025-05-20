@@ -2,10 +2,10 @@
 import { XMarkIcon } from '@heroicons/vue/20/solid'
 import { shallowRef } from "vue"
 import { usePage } from "@inertiajs/vue3"
-import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translationStore"
-import { useModalLiFoStore } from '@IceModalLiFo/Components/totocsa/ModalLiFo/ModalLiFoStore.js'
-import CountItemsAndTranslationIcon from "@IceModalLiFo/Components/totocsa/ModalLiFo/CountItemsAndTranslationIcon.vue"
-import Modal from "@IceModalLiFo/Components/totocsa/ModalLiFo/Modal.vue"
+import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/LocalTranslation/translationStore"
+import { useModalLiFoStore } from '@IceModalLiFo/Components/ModalLiFo/ModalLiFoStore.js'
+import CountItemsAndTranslationIcon from "@IceModalLiFo/Components/ModalLiFo/CountItemsAndTranslationIcon.vue"
+import Modal from "@IceModalLiFo/Components/ModalLiFo/Modal.vue"
 import LocalTranslation from "./LocalTranslation.vue"
 
 const props = defineProps({
