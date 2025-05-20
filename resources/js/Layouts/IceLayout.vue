@@ -6,7 +6,7 @@ import { useIndex } from '@IceIcseusd/Components/totocsa/Icseusd/js/useIndex.js'
 import { useTranslationStore } from "@IceDatabaseTranslationLocally/Components/totocsa/LocalTranslation/translationStore"
 import ApplicationMark from '@/Components/ApplicationMark.vue'
 import Banner from '@/Components/Banner.vue'
-import Dropdown from '@/Components/Dropdown.vue'
+import Dropdown from '@IceIcseusd/Components/totocsa/Dropdown.vue'
 import DropdownLink from '@/Components/DropdownLink.vue'
 import ModalLiFo from "@IceModalLiFo/Components/totocsa/ModalLiFo/ModalLiFo.vue"
 import LanguageSwitcher from '@IceDatabaseTranslationLocally/Components/totocsa/LanguageSwitcher.vue'
