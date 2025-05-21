@@ -16,8 +16,8 @@ return new class extends Migration
         $tableName = 'translationvariants';
         Schema::create($tableName, function (Blueprint $table) {
             $table->id()->primary();
-            $table->bigInteger('locales_id');
-            $table->bigInteger('translationoriginals_id');
+            $table->bigInteger('locales_id')->unsigned();
+            $table->bigInteger('translationoriginals_id')->unsigned();
             $table->string('subtitle', 668);
             $table->timestamps();
 
