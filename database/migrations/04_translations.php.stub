@@ -40,9 +40,9 @@ return new class extends Migration
 
             foreach (['locales', 'translationoriginals'] as $tableName) {
                 DB::statement(
-                    "CREATE TRIGGER `{$tableName}_insertAllNewTranslationvariants` BEFORE UPDATE ON `{$tableName}` FOR EACH ROW BEGIN"
-                        . " CALL insertAllNewTranslationvariants();"
-                        . " END;"
+                    "CREATE TRIGGER `{$tableName}_insertAllNewTranslationvariants` BEFORE UPDATE ON `{$tableName}` FOR EACH ROW BEGIN\n"
+                        . "CALL insertAllNewTranslationvariants();\n"
+                        . "END"
                 );
             }
         }
