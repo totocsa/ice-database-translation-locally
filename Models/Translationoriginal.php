@@ -72,7 +72,7 @@ class Translationoriginal extends Model
 
         return [
             'category' => ['required', 'string', 'max:100', new UniqueMultiple($request, $tableName, $attributes, ['id'])],
-            'subtitle' => ['required', 'string', 'max:1000', new UniqueMultiple($request, $tableName, $attributes, ['id'])],
+            'subtitle' => ['required', 'string', 'max:668', new UniqueMultiple($request, $tableName, $attributes, ['id'])],
         ];
     }
 

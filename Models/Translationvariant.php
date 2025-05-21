@@ -68,7 +68,7 @@ class Translationvariant extends Model
         return [
             'locales_id' => ['required', 'integer',/* $uniqueLocale_idTranslationoriginal_idSubtitle*/],
             'translationoriginals_id' => ['required', 'integer', /*$uniqueLocale_idTranslationoriginal_idSubtitle*/],
-            'subtitle' => ['string', 'max:1000', /*$uniqueLocale_idTranslationoriginal_idSubtitle*/],
+            'subtitle' => ['string', 'max:668', /*$uniqueLocale_idTranslationoriginal_idSubtitle*/],
         ];
     }
 

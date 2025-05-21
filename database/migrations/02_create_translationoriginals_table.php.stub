@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create($tableName, function (Blueprint $table) {
             $table->id()->primary();
             $table->string('category', 100);
-            $table->string('subtitle', 1000);
+            $table->string('subtitle', 668);
             $table->unique(['category', 'subtitle']);
             $table->timestamps();
         });

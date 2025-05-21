@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id()->primary();
             $table->bigInteger('locales_id');
             $table->bigInteger('translationoriginals_id');
-            $table->string('subtitle', 1000);
+            $table->string('subtitle', 668);
             $table->timestamps();
 
             $table->unique(['locales_id', 'translationoriginals_id']);
