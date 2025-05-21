@@ -11,26 +11,40 @@ return new class extends Migration
     public function up(): void
     {
         $driver = DB::getDriverName();
+        $insertAllNewTranslationvariants = "INSERT INTO translationvariants(locales_id, translationoriginals_id, subtitle)\n"
+            . "  SELECT t1.id, t2.id, ''\n"
+            . "    FROM locales t1, translationoriginals t2\n"
+            . "    WHERE t1.enabled AND NOT EXISTS(\n"
+            . "      SELECT 1 FROM translationvariants\n"
+            . "        WHERE locales_id=t1.id AND translationoriginals_id=t2.id);";
 
         if ($driver === 'pgsql') {
             DB::statement("CREATE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals() RETURNS trigger"
                 . "    LANGUAGE plpgsql"
                 . "    AS \$\$BEGIN\n"
-                . "INSERT INTO translationvariants(locales_id, translationoriginals_id, subtitle)\n"
-                . "  SELECT t1.id, t2.id, ''\n"
-                . "    FROM locales t1, translationoriginals t2\n"
-                . "    WHERE t1.enabled AND NOT EXISTS(\n"
-                . "      SELECT 1 FROM translationvariants\n"
-                . "      WHERE locales_id=t1.id AND translationoriginals_id=t2.id);\n"
-                . "\n"
+                . "$insertAllNewTranslationvariants\n"
                 . "  RETURN NEW;\n"
                 . "END\n"
                 . "$$;");
 
             DB::statement("ALTER FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals() OWNER TO zem;");
 
-            DB::statement("CREATE TRIGGER locales_after_insert_into_translationvariants AFTER INSERT OR UPDATE ON public.locales FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
-            DB::statement("CREATE TRIGGER translationoriginals_after_insert_into_translationvariants AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
+            //DB::statement("CREATE TRIGGER locales_after_insert_into_translationvariants AFTER INSERT OR UPDATE ON public.locales FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
+            //DB::statement("CREATE TRIGGER translationoriginals_after_insert_into_translationvariants AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
+
+            foreach (['locales', 'translationoriginals'] as $tableName) {
+                DB::statement("CREATE TRIGGER \"{$tableName}_after_insert_into_translationvariants\n AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
+            }
+        } elseif (in_array($driver, ['mysql', 'mariadb'])) {
+            DB::statement("CREATE PROCEDURE `insertAllNewTranslationvariants`()\n$insertAllNewTranslationvariants");
+
+            foreach (['locales', 'translationoriginals'] as $tableName) {
+                DB::statement(
+                    "CREATE TRIGGER `{$tableName}_insertAllNewTranslationvariants` BEFORE UPDATE ON `{$tableName}` FOR EACH ROW BEGIN"
+                        . " CALL insertAllNewTranslationvariants();"
+                        . " END;"
+                );
+            }
         }
     }
 

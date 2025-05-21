@@ -22,9 +22,23 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['locales_id', 'translationoriginals_id']);
+
+            $table->foreign('locales_id', 'translationvariants_locales_id_foreign')
+                ->references('id')
+                ->on('locales')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('translationoriginals_id', 'translationvariants_translationoriginals_id_foreign')
+                ->references('id')
+                ->on('translationoriginals')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
 
-        $driver = DB::getDriverName();
+        MigrationHelper::defaultCreatedUpdated($tableName);
+
+        /*$driver = DB::getDriverName();
 
         if ($driver === 'pgsql') {
             MigrationHelper::defaultCreatedUpdated($tableName);
@@ -40,7 +54,7 @@ return new class extends Migration
                 . " FOREIGN KEY (translationoriginals_id)"
                 . " REFERENCES public.translationoriginals(id)"
                 . " ON UPDATE CASCADE ON DELETE CASCADE;");
-        }
+        }*/
     }
 
     /**
