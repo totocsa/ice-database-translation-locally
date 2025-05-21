@@ -54,43 +54,46 @@ class LocalesController extends IcseusdController
         'locales-flag' => '',
     ];
 
-    public $conditions = [
-        'locales-configname' => [
-            'operator' => 'ilike',
-            'value' => "%{{locales-configname}}%",
-            'boolean' => 'and',
-        ],
-        'locales-enabled' => [
-            'operator' => 'ilike',
-            'value' => "%{{locales-enabled}}%",
-            'boolean' => 'and',
-        ],
-        'locales-name' => [
-            'operator' => 'ilike',
-            'value' => "%{{locales-name}}%",
-            'boolean' => 'and',
-        ],
-        'locales-script' => [
-            'operator' => 'ilike',
-            'value' => "%{{locales-script}}%",
-            'boolean' => 'and',
-        ],
-        'locales-native' => [
-            'operator' => 'ilike',
-            'value' => "%{{locales-native}}%",
-            'boolean' => 'and',
-        ],
-        'locales-regional' => [
-            'operator' => 'ilike',
-            'value' => "%{{locales-regional}}%",
-            'boolean' => 'and',
-        ],
-        'locales-flag' => [
-            'operator' => 'ilike',
-            'value' => "%{{locales-flag}}%",
-            'boolean' => 'and',
-        ],
-    ];
+    public function conditions()
+    {
+        return [
+            'locales-configname' => [
+                'operator' => $this->ilikeORLike,
+                'value' => "%{{locales-configname}}%",
+                'boolean' => 'and',
+            ],
+            'locales-enabled' => [
+                'operator' => $this->ilikeORLike,
+                'value' => "%{{locales-enabled}}%",
+                'boolean' => 'and',
+            ],
+            'locales-name' => [
+                'operator' => $this->ilikeORLike,
+                'value' => "%{{locales-name}}%",
+                'boolean' => 'and',
+            ],
+            'locales-script' => [
+                'operator' => $this->ilikeORLike,
+                'value' => "%{{locales-script}}%",
+                'boolean' => 'and',
+            ],
+            'locales-native' => [
+                'operator' => $this->ilikeORLike,
+                'value' => "%{{locales-native}}%",
+                'boolean' => 'and',
+            ],
+            'locales-regional' => [
+                'operator' => $this->ilikeORLike,
+                'value' => "%{{locales-regional}}%",
+                'boolean' => 'and',
+            ],
+            'locales-flag' => [
+                'operator' => $this->ilikeORLike,
+                'value' => "%{{locales-flag}}%",
+                'boolean' => 'and',
+            ],
+        ];
+    }
 
     public function fields()
     {
@@ -228,9 +231,9 @@ class LocalesController extends IcseusdController
                 "$t0.flag as $t0-flag",
             ]);
 
-        foreach ($this->conditions as $k => $v) {
+        foreach ($this->conditions() as $k => $v) {
             if ($this->filters[$k] > 0) {
-                $cond = $this->conditions[$k];
+                $cond = $this->conditions()[$k];
                 $value = strtr($cond['value'], $this->replaceFieldToValue());
                 $query->where(str_replace('-', '.', $k), $cond['operator'], $value, $cond['boolean']);
             }

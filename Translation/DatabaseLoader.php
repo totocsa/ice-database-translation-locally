@@ -14,7 +14,7 @@ class DatabaseLoader extends FileLoader implements Loader
 {
     const _appPrefix = 'app';
 
-    private $cache = [];
+    public $likeOrIlike;
     public $localesTableName;
     public $originalTableName;
     public $translationTableName;
@@ -22,6 +22,8 @@ class DatabaseLoader extends FileLoader implements Loader
     public function __construct(Filesystem $files, array|string $path)
     {
         parent::__construct($files, $path);
+
+        $this->likeOrIlike = DB::getDriverName() === 'pgsql' ? 'ilike' : 'like';
 
         $this->localesTableName = (new Locale())->getTable();
         $this->originalTableName = (new Translationoriginal())->getTable();
@@ -36,7 +38,7 @@ class DatabaseLoader extends FileLoader implements Loader
 
         if (is_null($namespace) || $namespace === '*') {
             $isGroup = Translationoriginal::query()
-                ->where('category', 'ilike', $this::_appPrefix . ".$group%")
+                ->where('category', $this->likeOrIlike, $this::_appPrefix . ".$group%")
                 ->exists();
 
             if (is_null($group) || $group === '*' || $isGroup) {
@@ -59,7 +61,7 @@ class DatabaseLoader extends FileLoader implements Loader
             ->from($this->originalTableName, 't0')
             ->leftJoin("$this->translationTableName as t1", 't1.translationoriginals_id', '=', 't0.id')
             ->leftJoin("$this->localesTableName as t2", 't2.id', '=', 't1.locales_id')
-            ->where('category', 'ilike', "$prefix%")
+            ->where('category', $this->likeOrIlike, "$prefix%")
             ->where('t2.configname', $locale)
             ->get()->toArray();
 
