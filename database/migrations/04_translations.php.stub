@@ -12,7 +12,7 @@ return new class extends Migration
     {
         $driver = DB::getDriverName();
 
-        if ($driver = 'pgsql') {
+        if ($driver === 'pgsql') {
             DB::statement("CREATE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals() RETURNS trigger"
                 . "    LANGUAGE plpgsql"
                 . "    AS \$\$BEGIN\n"
