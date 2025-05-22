@@ -11,10 +11,11 @@ return new class extends Migration
     public function up(): void
     {
         $driver = DB::getDriverName();
-        $insertAllNewTranslationvariants = "INSERT INTO translationvariants(locales_id, translationoriginals_id, subtitle)\n"
+        $insertAllNewTranslationvariants = "INSERT" . ($driver === 'mariadb' ? ' IGNORE' : '')
+            . " INTO translationvariants(locales_id, translationoriginals_id, subtitle)\n"
             . "  SELECT t1.id, t2.id, ''\n"
             . "    FROM locales t1, translationoriginals t2\n"
-            . "    WHERE t1.enabled AND NOT EXISTS(\n"
+            . "    WHERE t1.id IS NOT NULL AND t2.id IS NOT NULL AND t1.enabled AND NOT EXISTS(\n"
             . "      SELECT 1 FROM translationvariants\n"
             . "        WHERE locales_id=t1.id AND translationoriginals_id=t2.id);";
 
@@ -33,8 +34,8 @@ return new class extends Migration
             //DB::statement("CREATE TRIGGER translationoriginals_after_insert_into_translationvariants AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
 
             foreach (['locales', 'translationoriginals'] as $tableName) {
-                DB::statement("CREATE TRIGGER \"{$tableName}_after_insert_into_translationvariants\""
-                    . " AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION"
+                DB::statement("CREATE TRIGGER \"{$tableName}_insertAllNewTranslationvariants\""
+                    . " AFTER INSERT ON public.\"{$tableName}\" FOR EACH ROW EXECUTE FUNCTION"
                     . " public.translationvariants_insert_by_locales_and_translationoriginals();");
             }
         } elseif (in_array($driver, ['mysql', 'mariadb'])) {
