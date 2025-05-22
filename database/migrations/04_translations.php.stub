@@ -11,7 +11,8 @@ return new class extends Migration
     public function up(): void
     {
         $driver = DB::getDriverName();
-        $insertAllNewTranslationvariants = "INSERT INTO translationvariants(locales_id, translationoriginals_id, subtitle)\n"
+        $insertAllNewTranslationvariants = "INSERT" . ($driver === 'mariadb' ? ' IGNORE' : '')
+            . " INTO translationvariants(locales_id, translationoriginals_id, subtitle)\n"
             . "  SELECT t1.id, t2.id, ''\n"
             . "    FROM locales t1, translationoriginals t2\n"
             . "    WHERE t1.id IS NOT NULL AND t2.id IS NOT NULL AND t1.enabled AND NOT EXISTS(\n"
