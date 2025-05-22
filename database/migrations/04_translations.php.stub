@@ -33,7 +33,7 @@ return new class extends Migration
             //DB::statement("CREATE TRIGGER translationoriginals_after_insert_into_translationvariants AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
 
             foreach (['locales', 'translationoriginals'] as $tableName) {
-                DB::statement("CREATE TRIGGER \"{$tableName}_after_insert_into_translationvariants "
+                DB::statement("CREATE TRIGGER \"{$tableName}_after_insert_into_translationvariants\""
                     . " AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION"
                     . " public.translationvariants_insert_by_locales_and_translationoriginals();");
             }
