@@ -165,11 +165,11 @@ class DatabaseLoader extends FileLoader implements Loader
             }
 
             DB::commit();
+            return true;
         } catch (\Throwable $th) {
+            DB::rollBack();
             return $th;
         }
-
-        return true;
     }
 
     private function getItems($source, $category)
