@@ -33,14 +33,17 @@ return new class extends Migration
             //DB::statement("CREATE TRIGGER translationoriginals_after_insert_into_translationvariants AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
 
             foreach (['locales', 'translationoriginals'] as $tableName) {
-                DB::statement("CREATE TRIGGER \"{$tableName}_after_insert_into_translationvariants\n AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals();");
+                DB::statement("CREATE TRIGGER \"{$tableName}_after_insert_into_translationvariants "
+                    . " AFTER INSERT ON public.translationoriginals FOR EACH ROW EXECUTE FUNCTION"
+                    . " public.translationvariants_insert_by_locales_and_translationoriginals();");
             }
         } elseif (in_array($driver, ['mysql', 'mariadb'])) {
             DB::statement("CREATE PROCEDURE `insertAllNewTranslationvariants`()\n$insertAllNewTranslationvariants");
 
             foreach (['locales', 'translationoriginals'] as $tableName) {
                 DB::statement(
-                    "CREATE TRIGGER `{$tableName}_insertAllNewTranslationvariants` BEFORE UPDATE ON `{$tableName}` FOR EACH ROW BEGIN\n"
+                    "CREATE TRIGGER `{$tableName}_insertAllNewTranslationvariants` AFTER INSERT ON"
+                        . " `{$tableName}` FOR EACH ROW BEGIN\n"
                         . "CALL insertAllNewTranslationvariants();\n"
                         . "END"
                 );
