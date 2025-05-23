@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         $driver = DB::getDriverName();
-        $insertAllNewTranslationvariants = "INSERT" . ($driver === 'mariadb' ? ' IGNORE' : '')
+        $refreshTranslationvariants = "INSERT" . ($driver === 'mariadb' ? ' IGNORE' : '')
             . " INTO translationvariants(locales_id, translationoriginals_id, subtitle)\n"
             . "  SELECT t1.id, t2.id, ''\n"
             . "    FROM locales t1, translationoriginals t2\n"
@@ -23,7 +23,7 @@ return new class extends Migration
             DB::statement("CREATE FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals() RETURNS trigger"
                 . "    LANGUAGE plpgsql"
                 . "    AS \$\$BEGIN\n"
-                . "$insertAllNewTranslationvariants\n\n"
+                . "$refreshTranslationvariants\n\n"
                 . "  RETURN NEW;\n"
                 . "END\n"
                 . "$$;");
@@ -31,25 +31,25 @@ return new class extends Migration
             DB::statement("ALTER FUNCTION public.translationvariants_insert_by_locales_and_translationoriginals() OWNER TO zem;");
 
             foreach (['locales', 'translationoriginals'] as $tableName) {
-                DB::statement("CREATE TRIGGER \"{$tableName}_after_insertORupdate_insertAllNewTranslationvariants\""
+                DB::statement("CREATE TRIGGER \"{$tableName}_after_insertORupdate_refreshTranslationvariants\""
                     . " AFTER INSERT OR UPDATE ON public.\"{$tableName}\" FOR EACH ROW EXECUTE FUNCTION"
                     . " public.translationvariants_insert_by_locales_and_translationoriginals();");
             }
         } elseif (in_array($driver, ['mysql', 'mariadb'])) {
-            DB::statement("CREATE PROCEDURE `insertAllNewTranslationvariants`()\n$insertAllNewTranslationvariants");
+            DB::statement("CREATE PROCEDURE `refreshTranslationvariants`()\n$refreshTranslationvariants");
 
             foreach (['locales', 'translationoriginals'] as $tableName) {
                 DB::statement(
-                    "CREATE TRIGGER `{$tableName}_after_insert_insertAllNewTranslationvariants` AFTER INSERT ON"
+                    "CREATE TRIGGER `{$tableName}_after_insert_refreshTranslationvariants` AFTER INSERT ON"
                         . " `{$tableName}` FOR EACH ROW BEGIN\n"
-                        . "  CALL insertAllNewTranslationvariants();\n"
+                        . "  CALL refreshTranslationvariants();\n"
                         . "END"
                 );
 
                 DB::statement(
-                    "CREATE TRIGGER `{$tableName}_after_update_insertAllNewTranslationvariants` AFTER UPDATE ON"
+                    "CREATE TRIGGER `{$tableName}_after_update_refreshTranslationvariants` AFTER UPDATE ON"
                         . " `{$tableName}` FOR EACH ROW BEGIN\n"
-                        . "  CALL insertAllNewTranslationvariants();\n"
+                        . "  CALL refreshTranslationvariants();\n"
                         . "END"
                 );
             }
