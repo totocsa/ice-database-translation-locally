@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
+    const tableName = 'translationvariants';
+
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        $tableName = 'translationvariants';
-        Schema::create($tableName, function (Blueprint $table) {
+        Schema::create($this::tableName, function (Blueprint $table) {
             $table->id()->primary();
             $table->bigInteger('locales_id')->unsigned();
             $table->bigInteger('translationoriginals_id')->unsigned();
@@ -36,25 +37,7 @@ return new class extends Migration
                 ->onDelete('cascade');
         });
 
-        MigrationHelper::defaultCreatedUpdated($tableName);
-
-        /*$driver = DB::getDriverName();
-
-        if ($driver === 'pgsql') {
-            MigrationHelper::defaultCreatedUpdated($tableName);
-
-            DB::statement("ALTER TABLE ONLY public.translationvariants"
-                . " ADD CONSTRAINT translationvariants_locales_id_foreign"
-                . " FOREIGN KEY (locales_id)"
-                . " REFERENCES public.locales(id)"
-                . " ON UPDATE CASCADE ON DELETE CASCADE;");
-
-            DB::statement("ALTER TABLE ONLY public.translationvariants"
-                . " ADD CONSTRAINT translationvariants_translationoriginals_id_foreign"
-                . " FOREIGN KEY (translationoriginals_id)"
-                . " REFERENCES public.translationoriginals(id)"
-                . " ON UPDATE CASCADE ON DELETE CASCADE;");
-        }*/
+        MigrationHelper::upDefaultCreatedUpdated($this::tableName);
     }
 
     /**
@@ -62,6 +45,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('translationvariants');
+        MigrationHelper::downDefaultCreatedUpdated($this::tableName);
+        Schema::dropIfExists($this::tableName);
     }
 };
